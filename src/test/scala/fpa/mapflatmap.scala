@@ -23,15 +23,15 @@ class MapAndFlatMapSpec extends FlatSpec with Matchers {
 
   it should "Q4: The `Map` syntax implicitly resolves on all types of kind `* -> *`" in {
     """ object client {
-      |   val ls: List[String]   = List(0, 1, 2, 3).fmap(_.toString)
-      |   val os: Option[String] = Option(1).fmap(_.toString)
+      |   val ls: List[String]   = List(0, 1, 2, 3).map(_.toString)
+      |   val os: Option[String] = Option(1).map(_.toString)
       | }
     """.stripMargin should compile
   }
 
   it should "Q5: The `Map` type class allow instances for own data types" in {
     """
-      | Pair(1, 2).fmap(_.toString) shouldBe Pair("1", "2")
+      | Pair(1, 2).map(_.toString) shouldBe Pair("1", "2")
     """.stripMargin should compile
 
     // And it should also work, so uncomment the line below as soon as it's compile ...
@@ -40,8 +40,8 @@ class MapAndFlatMapSpec extends FlatSpec with Matchers {
 
   it should "Q6: The `FlatMap` type class have list and option instances in scope" in {
     """
-      | List("0", "1", "2", "3").bind(s => List(s.toInt)) shouldBe List(0, 1, 2, 3)
-      | Option("0").bind(s => Some(s.toInt)) shouldBe Some(0)
+      | List("0", "1", "2", "3").flatMap(s => List(s.toInt)) shouldBe List(0, 1, 2, 3)
+      | Option("0").flatMap(s => Some(s.toInt)) shouldBe Some(0)
     """.stripMargin should compile
 
     // And it should also work, so uncomment the lines below as soon as the above compiles ...
@@ -51,7 +51,7 @@ class MapAndFlatMapSpec extends FlatSpec with Matchers {
 
   it should "Q7: The `FlatMap` type class allows instances for new data type" in {
     """
-      | Pair(1, 2).bind(i => Pair(i.toString, i.toString)) shouldBe Pair("1", "2")
+      | Pair(1, 2).flatMap(i => Pair(i.toString, i.toString)) shouldBe Pair("1", "2")
     """.stripMargin should compile
 
     // And it should also work, so uncomment the line below as soon as the above compiles ...
@@ -60,14 +60,15 @@ class MapAndFlatMapSpec extends FlatSpec with Matchers {
 
   it should "Q8: The `FlatMap` syntax implicitly resolves on all types of kind `* -> *`" in {
     """ object client {
-      |   val ls: List[String]   = List(0, 1, 2, 3).bind(i => List(i.toString))
-      |   val os: Option[String] = Option(1).bind(i => Some(i.toString))
-      |   val pr: Pair[Int]      = Pair("1", "2").bind(s => Pair(s.toInt, s.toInt))
+      |   val ls: List[String]   = List(0, 1, 2, 3).flatMap(i => List(i.toString))
+      |   val os: Option[String] = Option(1).flatMap(i => Some(i.toString))
+      |   val pr: Pair[Int]      = Pair("1", "2").flatMap(s => Pair(s.toInt, s.toInt))
       | }
     """.stripMargin should compile
   }
 
-  ignore should "Q9: (Bonus) The `FlatMap` and `Map` type classes encode a for comprehension" in {
+  //ignore
+  it should "Q9: (Bonus) The `FlatMap` and `Map` type classes encode a for comprehension" in {
     """
       | sealed trait Ref[A] {
       |   def value: A

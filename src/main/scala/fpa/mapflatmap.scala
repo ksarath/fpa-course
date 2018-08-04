@@ -68,7 +68,7 @@ object library {
   // `implicit class MapOps[M[_], A]` ...
 
   implicit class MapSyntax[M[_]: Map, A](ma: M[A]) {
-    def fmap[B](f: A => B): M[B] = implicitly[Map[M]].fmap(f)(ma)
+    def map[B](f: A => B): M[B] = implicitly[Map[M]].fmap(f)(ma)
   }
 
 
@@ -109,7 +109,7 @@ object library {
 
   // `implicit class FlatMapOps[M[_], A]` ...
   implicit class FlatMapSyntax[M[_]: FlatMap, A](a: M[A]) {
-    def bind[B](f: A => M[B]): M[B] = implicitly[FlatMap[M]].bind(a)(f)
+    def flatMap[B](f: A => M[B]): M[B] = implicitly[FlatMap[M]].bind(a)(f)
   }
 
   /** Q9: (Bonus)
