@@ -1,17 +1,21 @@
 package fpa
 
-trait Convert[VO, DTO] {
-  def toVO(dto: DTO): VO
-  def toDto(vo: VO): DTO
+trait VO
+
+trait DTO
+
+trait Convert[V <: VO, D <: DTO] {
+  def toVO(dto: D): V
+  def toDto(vo: V): D
 }
 
 object Convert {
-  implicit class VO2DTOSyntax[VO](vo: VO) {
-    def toDto[DTO](implicit converter: Convert[VO, DTO]): DTO = converter toDto vo
+  implicit class VO2DTOSyntax[V <: VO](vo: V) {
+    def toDto[D <: DTO](implicit converter: Convert[V, D]): D = converter toDto vo
   }
 
-  implicit class DTO2VOSyntax[DTO](dto: DTO) {
-    def toVO[VO](implicit converter: Convert[VO, DTO]): VO = converter toVO dto
+  implicit class DTO2VOSyntax[D <: DTO](dto: D) {
+    def toVO[V <: VO](implicit converter: Convert[V, D]): V = converter toVO dto
   }
 }
 
@@ -23,9 +27,9 @@ object Convertion {
   }
 }
 
-case class XVO(id: String)
+case class XVO(id: String) extends VO
 
-case class XDto(id: String)
+case class XDto(id: String) extends DTO
 
 object Main extends App {
   import Convertion._
@@ -34,5 +38,4 @@ object Main extends App {
   val vo = XVO("value")
   println(vo.toDto)
   println(vo.toDto.toVO)
-  println(vo)
 }
